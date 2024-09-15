@@ -7,6 +7,11 @@ Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "MagicMonitor", "MagicMonito
 EndProject
 Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "MagicMonitor.RestApi", "MagicMonitor.RestApi\MagicMonitor.RestApi.nfproj", "{0D2E6C6E-95BF-49D2-A721-0ADD40938371}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{36972FDA-DA24-4CD8-9ED5-50B027392F12}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

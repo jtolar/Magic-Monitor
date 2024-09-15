@@ -15,6 +15,7 @@
     <RootNamespace>MagicMonitor</RootNamespace>
     <AssemblyName>MagicMonitor</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
@@ -25,8 +26,30 @@
     <Reference Include="mscorlib">
       <HintPath>..\packages\nanoFramework.CoreLibrary.1.15.5\lib\mscorlib.dll</HintPath>
     </Reference>
+    <Reference Include="nanoFramework.Graphics">
+      <HintPath>..\packages\nanoFramework.Graphics.Ili9341.1.2.15\lib\nanoFramework.Graphics.dll</HintPath>
+    </Reference>
+    <Reference Include="nanoFramework.Graphics.Core">
+      <HintPath>..\packages\nanoFramework.Graphics.Ili9341.1.2.15\lib\nanoFramework.Graphics.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="nanoFramework.Graphics.Ili9341">
+      <HintPath>..\packages\nanoFramework.Graphics.Ili9341.1.2.15\lib\nanoFramework.Graphics.Ili9341.dll</HintPath>
+    </Reference>
+    <Reference Include="nanoFramework.ResourceManager">
+      <HintPath>..\packages\nanoFramework.ResourceManager.1.2.19\lib\nanoFramework.ResourceManager.dll</HintPath>
+    </Reference>
+    <Reference Include="nanoFramework.Runtime.Events">
+      <HintPath>..\packages\nanoFramework.Runtime.Events.1.11.18\lib\nanoFramework.Runtime.Events.dll</HintPath>
+    </Reference>
+    <Reference Include="nanoFramework.Runtime.Native">
+      <HintPath>..\packages\nanoFramework.Runtime.Native.1.6.12\lib\nanoFramework.Runtime.Native.dll</HintPath>
+    </Reference>
+    <Reference Include="nanoFramework.System.Collections">
+      <HintPath>..\packages\nanoFramework.System.Collections.1.5.31\lib\nanoFramework.System.Collections.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include=".editorconfig" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

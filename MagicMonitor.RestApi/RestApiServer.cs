@@ -1,10 +1,15 @@
-﻿using System;
+﻿#define  HAS_WIFI
+
+
+using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Threading;
 using nanoFramework.Networking;
 using nanoFramework.WebServer;
+
 #if HAS_WIFI
 using System.Device.Wifi;
 #endif
@@ -15,16 +20,22 @@ namespace MagicMonitor.RestApi
     {
 
 #if HAS_WIFI
-        private static string MySsid = "SCC Inmate Wifi";
-        private static string MyPassword = "mj41paasaap14";
+        private static string WifiSsid = "SCC Inmate Wifi";
+        private static string WifiPassword = "mj41paasaap14";
 #endif
 
-        //private static bool _isConnected = false;
+//private static bool _isConnected = false
+//
 
+#if HAS_WIFI
+        public static void SetupWifi(string ssid, string password)
+        {
+            WifiSsid = ssid;
+            WifiPassword = password;
+        }
+#endif
         public static void Start()
         {
-            Debug.WriteLine("Hello from a webserver!");
-
             try
             {
 
@@ -34,37 +45,57 @@ namespace MagicMonitor.RestApi
                 bool success;
                 CancellationTokenSource cs = new(60000);
 #if HAS_WIFI
-                success = WifiNetworkHelper.ConnectDhcp(MySsid, MyPassword, requiresDateTime: true, token: cs.Token);
+                success = WifiNetworkHelper.ConnectDhcp(WifiSsid, WifiPassword, requiresDateTime: true, token: cs.Token);
+                Debug.WriteLine("Has WIFI: True");
 #else
                 success = NetworkHelper.SetupAndConnectNetwork(cs.Token, true);
 #endif
                 if (!success)
                 {
                     Debug.WriteLine($"Can't get a proper IP address and DateTime, error: {WifiNetworkHelper.Status}.");
+#if HAS_WIFI
                     if (WifiNetworkHelper.HelperException != null)
                     {
                         Debug.WriteLine($"Exception: {WifiNetworkHelper.HelperException}");
                     }
-
+#else
+                    if (NetworkHelper.HelperException != null)
+                    {
+                        Debug.WriteLine($"Exception: {NetworkHelper.HelperException}");
+                    }
+#endif
                     return;
                 }
-
-                var allTypes = Assembly.GetAssembly(typeof(IRestApiController)).GetTypes();
-                var controllersList = new ArrayList();
-                
-                foreach (Type type in allTypes)
-                {
-                    if (type.IsInstanceOfType(typeof(IRestApiController)))
-                    {
-                        controllersList.Add(type);
-                    }
+                else
+                { 
+                    Debug.WriteLine($"IP Address Acquired: {IPGlobalProperties.GetIPAddress().MapToIPv4()}");
                 }
 
-                // Instantiate a new web server on port 80.
-                using WebServer server = new WebServer(80, HttpProtocol.Http, (Type[])controllersList.ToArray(typeof(Type)));
+                try
+                {
+                    var allTypes = Assembly.GetAssembly(typeof(IRestApiController)).GetTypes();
+                    var controllersList = new ArrayList();
 
-                // Start the server.
-                server.Start();
+                    foreach (var type in allTypes)
+                    {
+                        if (type.IsInstanceOfType(typeof(IRestApiController)))
+                        {
+                            Debug.WriteLine($"Found Controller: {type.Name}");
+                            controllersList.Add(type);
+                        }
+                    }
+
+                    // Instantiate a new web server on port 80.
+                    using var server = new WebServer(80, HttpProtocol.Http,
+                        (Type[])controllersList.ToArray(typeof(Type)));
+
+                    // Start the server.
+                    server.Start();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
 
                 Thread.Sleep(Timeout.Infinite);
 
