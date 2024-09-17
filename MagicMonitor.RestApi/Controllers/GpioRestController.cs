@@ -5,9 +5,9 @@ using System;
 
 namespace MagicMonitor.RestApi.Controllers
 {
-    class ControllerGpio : IRestApiController
+    class GpioRestController : IRestApiController
     {
-        private static GpioController _controller = new GpioController();
+        private static readonly System.Device.Gpio.GpioController Controller = new System.Device.Gpio.GpioController();
 
         /// <summary>
         /// Open a pin, ex /open/2/output 
@@ -28,18 +28,18 @@ namespace MagicMonitor.RestApi.Controllers
 
                 var pinNumber = Convert.ToInt32(args[1]);
 
-                if (!_controller.IsPinOpen(pinNumber))
+                if (!Controller.IsPinOpen(pinNumber))
                 {
-                    _controller.OpenPin(pinNumber);
+                    Controller.OpenPin(pinNumber);
                 }
 
                 if (args[2].ToLower() == "output")
                 {
-                    _controller.SetPinMode(pinNumber, PinMode.Output);
+                    Controller.SetPinMode(pinNumber, PinMode.Output);
                 }
                 else if (args[2].ToLower() == "input")
                 {
-                    _controller.SetPinMode(pinNumber, PinMode.Input);
+                    Controller.SetPinMode(pinNumber, PinMode.Input);
                 }
                 else
                 {
@@ -74,9 +74,9 @@ namespace MagicMonitor.RestApi.Controllers
 
                 var pinNumber = Convert.ToInt32(args[1]);
 
-                if (_controller.IsPinOpen(pinNumber))
+                if (Controller.IsPinOpen(pinNumber))
                 {
-                    _controller.ClosePin(pinNumber);
+                    Controller.ClosePin(pinNumber);
                 }
 
                 WebServer.OutputHttpCode(e.Context.Response, HttpStatusCode.OK);
@@ -106,7 +106,7 @@ namespace MagicMonitor.RestApi.Controllers
                 }
 
                 var pinNumber = Convert.ToInt32(args[1]);
-                if (!_controller.IsPinOpen(pinNumber))
+                if (!Controller.IsPinOpen(pinNumber))
                 {
                     WebServer.OutputHttpCode(e.Context.Response, HttpStatusCode.BadRequest);
                     return;
@@ -114,11 +114,11 @@ namespace MagicMonitor.RestApi.Controllers
 
                 if ((args[2].ToLower() == "high") || (args[2] == "1"))
                 {
-                    _controller.Write(pinNumber, PinValue.High);
+                    Controller.Write(pinNumber, PinValue.High);
                 }
                 else if ((args[2].ToLower() == "low") || (args[2] == "0"))
                 {
-                    _controller.Write(pinNumber, PinValue.Low);
+                    Controller.Write(pinNumber, PinValue.Low);
                 }
 
                 WebServer.OutputHttpCode(e.Context.Response, HttpStatusCode.OK);
@@ -147,13 +147,13 @@ namespace MagicMonitor.RestApi.Controllers
                 }
 
                 var pinNumber = Convert.ToInt32(args[1]);
-                if (!_controller.IsPinOpen(pinNumber))
+                if (!Controller.IsPinOpen(pinNumber))
                 {
                     WebServer.OutputHttpCode(e.Context.Response, HttpStatusCode.BadRequest);
                     return;
                 }
 
-                var result = _controller.Read(pinNumber);
+                var result = Controller.Read(pinNumber);
                 e.Context.Response.ContentType = "text/plain";
                 WebServer.OutPutStream(e.Context.Response, result.ToString());
             }

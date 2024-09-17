@@ -1,7 +1,4 @@
-﻿#define  HAS_WIFI
-
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Diagnostics;
 using System.Net.NetworkInformation;
@@ -9,61 +6,40 @@ using System.Reflection;
 using System.Threading;
 using nanoFramework.Networking;
 using nanoFramework.WebServer;
-
-#if HAS_WIFI
 using System.Device.Wifi;
-#endif
 
 namespace MagicMonitor.RestApi
 {
     public class RestApiServer
     {
-
-#if HAS_WIFI
         private static string WifiSsid = "SCC Inmate Wifi";
         private static string WifiPassword = "mj41paasaap14";
-#endif
 
-//private static bool _isConnected = false
-//
-
-#if HAS_WIFI
         public static void SetupWifi(string ssid, string password)
         {
             WifiSsid = ssid;
             WifiPassword = password;
         }
-#endif
+
         public static void Start()
         {
             try
             {
 
-                int connectRetry = 0;
-
                 Debug.WriteLine("Waiting for network up and IP address...");
                 bool success;
                 CancellationTokenSource cs = new(60000);
-#if HAS_WIFI
                 success = WifiNetworkHelper.ConnectDhcp(WifiSsid, WifiPassword, requiresDateTime: true, token: cs.Token);
                 Debug.WriteLine("Has WIFI: True");
-#else
-                success = NetworkHelper.SetupAndConnectNetwork(cs.Token, true);
-#endif
+
                 if (!success)
                 {
                     Debug.WriteLine($"Can't get a proper IP address and DateTime, error: {WifiNetworkHelper.Status}.");
-#if HAS_WIFI
                     if (WifiNetworkHelper.HelperException != null)
                     {
                         Debug.WriteLine($"Exception: {WifiNetworkHelper.HelperException}");
                     }
-#else
-                    if (NetworkHelper.HelperException != null)
-                    {
-                        Debug.WriteLine($"Exception: {NetworkHelper.HelperException}");
-                    }
-#endif
+
                     return;
                 }
                 else
@@ -73,21 +49,25 @@ namespace MagicMonitor.RestApi
 
                 try
                 {
-                    var allTypes = Assembly.GetAssembly(typeof(IRestApiController)).GetTypes();
-                    var controllersList = new ArrayList();
-
-                    foreach (var type in allTypes)
-                    {
-                        if (type.IsInstanceOfType(typeof(IRestApiController)))
-                        {
-                            Debug.WriteLine($"Found Controller: {type.Name}");
-                            controllersList.Add(type);
-                        }
-                    }
+                    var controllersList = GetControllersList();
 
                     // Instantiate a new web server on port 80.
-                    using var server = new WebServer(80, HttpProtocol.Http,
-                        (Type[])controllersList.ToArray(typeof(Type)));
+                    using var server = new WebServer(80, HttpProtocol.Http, controllersList);
+                    
+                    server.CommandReceived += ServerOnCommandReceived;
+                    server.WebServerStatusChanged += ServerOnWebServerStatusChanged;
+
+                    void ServerOnWebServerStatusChanged(object obj, WebServerStatusEventArgs e)
+                    {
+                        Debug.WriteLine($"Server Status Changed: {(e.Status == WebServerStatus.Running ? "Running" : "Stopped")}");
+                    }
+
+                    void ServerOnCommandReceived(object obj, WebServerEventArgs e)
+                    {
+                        Debug.WriteLine($"Command Received: {e.Context.Request.Url.OriginalString}");
+                    }
+
+
 
                     // Start the server.
                     server.Start();
@@ -105,6 +85,34 @@ namespace MagicMonitor.RestApi
 
                 Debug.WriteLine($"{ex}");
             }
+        }
+
+        private static Type[] GetControllersList()
+        {
+            var controllersList = new ArrayList();
+
+            try
+            {
+                var allTypes = Assembly.GetAssembly(typeof(IRestApiController)).GetTypes();
+                Debug.WriteLine($"List of Types in {Assembly.GetAssembly(typeof(IRestApiController))}");
+
+                foreach (var type in allTypes)
+                {
+                    Debug.WriteLine($"Type {type.Name}...");
+                    if (type.FullName.EndsWith("RestController"))
+                    {
+                        Debug.WriteLine($"Found Controller: {type.Name}");
+                        controllersList.Add(type);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception getting Rest Controllers: {ex.Message}");
+            }
+
+            return (Type[]) controllersList.ToArray(typeof(Type));
         }
     }
 }

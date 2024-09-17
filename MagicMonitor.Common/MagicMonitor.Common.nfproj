@@ -8,38 +8,54 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectTypeGuids>{11A8DD76-328B-46DF-9F39-F559912D0360};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>0d2e6c6e-95bf-49d2-a721-0add40938371</ProjectGuid>
+    <ProjectGuid>fbd9f4de-969b-4353-a9f2-368c68862a9e</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>MagicMonitor.RestApi</RootNamespace>
-    <AssemblyName>MagicMonitor.RestApi</AssemblyName>
+    <RootNamespace>MagicMonitor.Common</RootNamespace>
+    <AssemblyName>MagicMonitor.Common</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
-    <Compile Include="Controllers\HomeRestController.cs" />
-    <Compile Include="IRestApiController.cs" />
-    <Compile Include="Models\Bme280DataModel.cs" />
-    <Compile Include="RestApiServer.cs" />
-    <Compile Include="Controllers\GpioRestController.cs" />
+    <Compile Include="Models\Bme280DataCollection.cs" />
+    <Compile Include="Models\Sensors\Bme280DataModel.cs" />
+    <Compile Include="Models\Sensors\Ens160DataModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SoftWAP\SoftWAPService.cs" />
+    <Compile Include="SoftWAP\WirelessAP.cs" />
+    <Compile Include="SoftWAP\WebServer.cs" />
+    <Compile Include="SoftWAP\Wireless80211.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Iot.Device.DhcpServer">
+      <HintPath>..\packages\nanoFramework.Iot.Device.DhcpServer.1.2.602\lib\Iot.Device.DhcpServer.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib">
       <HintPath>..\packages\nanoFramework.CoreLibrary.1.15.5\lib\mscorlib.dll</HintPath>
     </Reference>
+    <Reference Include="nanoFramework.Device.Bluetooth">
+      <HintPath>..\packages\nanoFramework.Device.Bluetooth.1.1.75\lib\nanoFramework.Device.Bluetooth.dll</HintPath>
+    </Reference>
+    <Reference Include="nanoFramework.ResourceManager">
+      <HintPath>..\packages\nanoFramework.ResourceManager.1.2.19\lib\nanoFramework.ResourceManager.dll</HintPath>
+    </Reference>
     <Reference Include="nanoFramework.Runtime.Events">
       <HintPath>..\packages\nanoFramework.Runtime.Events.1.11.18\lib\nanoFramework.Runtime.Events.dll</HintPath>
+    </Reference>
+    <Reference Include="nanoFramework.Runtime.Native">
+      <HintPath>..\packages\nanoFramework.Runtime.Native.1.6.12\lib\nanoFramework.Runtime.Native.dll</HintPath>
     </Reference>
     <Reference Include="nanoFramework.System.Collections">
       <HintPath>..\packages\nanoFramework.System.Collections.1.5.31\lib\nanoFramework.System.Collections.dll</HintPath>
     </Reference>
     <Reference Include="nanoFramework.System.Text">
       <HintPath>..\packages\nanoFramework.System.Text.1.2.54\lib\nanoFramework.System.Text.dll</HintPath>
-    </Reference>
-    <Reference Include="nanoFramework.WebServer">
-      <HintPath>..\packages\nanoFramework.WebServer.1.2.56\lib\nanoFramework.WebServer.dll</HintPath>
     </Reference>
     <Reference Include="System.Device.Gpio">
       <HintPath>..\packages\nanoFramework.System.Device.Gpio.1.1.41\lib\System.Device.Gpio.dll</HintPath>
@@ -62,6 +78,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\Peripherals\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource.resx">
+      <Generator>nFResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.CSharp.targets')" />
   <ProjectExtensions>
