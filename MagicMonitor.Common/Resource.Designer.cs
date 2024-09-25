@@ -25,6 +25,10 @@ namespace MagicMonitor.Common
                 return Resource.manager;
             }
         }
+        internal static nanoFramework.UI.Font GetFont(Resource.FontResources id)
+        {
+            return ((nanoFramework.UI.Font)(nanoFramework.Runtime.Native.ResourceUtility.GetObject(ResourceManager, id)));
+        }
         internal static string GetString(Resource.StringResources id)
         {
             return ((string)(nanoFramework.Runtime.Native.ResourceUtility.GetObject(ResourceManager, id)));
@@ -37,12 +41,16 @@ namespace MagicMonitor.Common
         internal enum BinaryResources : short
         {
             favicon = -22914,
+            nanoFrameworkLogo = -3372,
         }
         [System.SerializableAttribute()]
         internal enum StringResources : short
         {
             main = 4691,
-            comicsansms16 = 18566,
+        }
+        [System.SerializableAttribute()]
+        internal enum FontResources : short
+        {
             segoeuiregular12 = 21930,
         }
     }

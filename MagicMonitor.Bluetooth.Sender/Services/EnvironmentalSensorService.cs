@@ -19,7 +19,8 @@ namespace MagicMonitor.Bluetooth.Sender.Services
             Temperature,
             Humidity,
             Pressure,
-            Rainfall
+            Rainfall,
+            CO2,
         };
 
         public enum Sampling : byte
@@ -40,6 +41,8 @@ namespace MagicMonitor.Bluetooth.Sender.Services
             public GattLocalCharacteristic sensorChar;
             public Buffer dataBuffer;
         };
+
+        private static readonly Guid CO2CharacteristicUUID = Utilities.CreateUuidFromShortCode((ushort) 11216);
 
         public EnvironmentalSensorService()
         {
@@ -167,6 +170,8 @@ namespace MagicMonitor.Bluetooth.Sender.Services
 
                 case SensorType.Rainfall:
                     return GattCharacteristicUuids.Rainfall;
+                case SensorType.CO2:
+                    return CO2CharacteristicUUID;
             }
 
             throw new ArgumentOutOfRangeException();

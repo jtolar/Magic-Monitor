@@ -18,6 +18,7 @@
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
+    <Compile Include="DeviceUtility.cs" />
     <Compile Include="Models\Bme280DataCollection.cs" />
     <Compile Include="Models\Sensors\Bme280DataModel.cs" />
     <Compile Include="Models\Sensors\Ens160DataModel.cs" />
@@ -41,6 +42,12 @@
     </Reference>
     <Reference Include="nanoFramework.Device.Bluetooth">
       <HintPath>..\packages\nanoFramework.Device.Bluetooth.1.1.75\lib\nanoFramework.Device.Bluetooth.dll</HintPath>
+    </Reference>
+    <Reference Include="nanoFramework.Graphics">
+      <HintPath>..\packages\nanoFramework.Graphics.1.2.15\lib\nanoFramework.Graphics.dll</HintPath>
+    </Reference>
+    <Reference Include="nanoFramework.Graphics.Core">
+      <HintPath>..\packages\nanoFramework.Graphics.1.2.15\lib\nanoFramework.Graphics.Core.dll</HintPath>
     </Reference>
     <Reference Include="nanoFramework.ResourceManager">
       <HintPath>..\packages\nanoFramework.ResourceManager.1.2.19\lib\nanoFramework.ResourceManager.dll</HintPath>

@@ -124,10 +124,10 @@
   <data name="main" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\main.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="comicsansms16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\comicsansms16.tinyfnt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="nanoFramework-logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="nanoFrameworkLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\nanoFramework-logo.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="segoeuiregular12" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\segoeuiregular12.tinyfnt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>

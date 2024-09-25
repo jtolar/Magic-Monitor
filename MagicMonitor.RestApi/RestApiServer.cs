@@ -25,9 +25,9 @@ namespace MagicMonitor.RestApi
         {
             try
             {
-
                 Debug.WriteLine("Waiting for network up and IP address...");
                 bool success;
+             
                 CancellationTokenSource cs = new(60000);
                 success = WifiNetworkHelper.ConnectDhcp(WifiSsid, WifiPassword, requiresDateTime: true, token: cs.Token);
                 Debug.WriteLine("Has WIFI: True");
